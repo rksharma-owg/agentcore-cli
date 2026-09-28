@@ -1,0 +1,22 @@
+name: Fork preflight
+
+on:
+  push:
+    branches:
+      - preflight/byo-framework-validation-2076
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx vitest run --project unit src/cli/commands/add/__tests__/validate.test.ts --reporter=dot
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
