@@ -1,0 +1,22 @@
+name: Fork preflight
+
+on:
+  push:
+    branches:
+      - preflight/policy-target-cedar-2395
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx vitest run --project unit src/cli/tui/screens/policy/__tests__/synthesize-cedar.test.ts src/cli/primitives/__tests__/PolicyPrimitive.test.ts --reporter=dot
+      - run: npm run format:check
+      - run: npm run lint
+      - run: npm run typecheck
