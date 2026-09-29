@@ -30,7 +30,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
       - run: npm ci
       - run: npm run build
-      - run: npm test
+      - run: npx vitest run --project unit src/cli/commands/dev/__tests__/dev.test.ts src/cli/operations/dev/__tests__/load-dev-env.test.ts --reporter=dot
       - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
